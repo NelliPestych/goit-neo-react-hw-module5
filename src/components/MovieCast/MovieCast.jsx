@@ -6,6 +6,7 @@ import styles from './MovieCast.module.css';
 function MovieCast() {
     const { movieId } = useParams();
     const [cast, setCast] = useState([]);
+    const DEFAULT_ACTOR_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg';
 
     useEffect(() => {
         getMovieCast(movieId).then(setCast);
@@ -20,7 +21,7 @@ function MovieCast() {
                         <img
                             src={actor.profile_path
                                 ? `https://image.tmdb.org/t/p/w200${actor.profile_path}`
-                                : 'https://via.placeholder.com/200'}
+                                : DEFAULT_ACTOR_IMAGE}
                             alt={actor.name}
                         />
                         <p>{actor.name}</p>
