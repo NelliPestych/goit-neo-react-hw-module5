@@ -10,7 +10,7 @@ function MovieDetailsPage() {
     const navigate = useNavigate();
 
     // Зберігаємо початковий location.state, щоб після оновлення сторінки не втратити точку повернення
-    const backLinkRef = useRef(location.state ?? "/movies");
+    const backLinkRef = useRef(location.state?.from ?? "/movies");
 
     useEffect(() => {
         getMovieDetails(movieId).then(setMovie);
@@ -28,8 +28,8 @@ function MovieDetailsPage() {
 
             <h3>Additional information</h3>
             <ul>
-                <li><Link to="cast">Cast</Link></li>
-                <li><Link to="reviews">Reviews</Link></li>
+                <li><Link to="cast" state={{ from: backLinkRef.current }}>Cast</Link></li>
+                <li><Link to="reviews" state={{ from: backLinkRef.current }}>Reviews</Link></li>
             </ul>
 
             <Outlet />
