@@ -20,7 +20,7 @@ function MovieCast() {
                     <li key={actor.id} className={styles.castItem}>
                         <img
                             src={actor.profile_path
-                                ? `https://image.tmdb.org/t/p/w200${actor.profile_path}`
+                                ? `https://image.tmdb.org/t/p/original${actor.profile_path}`
                                 : DEFAULT_ACTOR_IMAGE}
                             alt={actor.name}
                         />
