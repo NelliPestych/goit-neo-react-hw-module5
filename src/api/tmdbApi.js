@@ -1,11 +1,10 @@
 import axios from 'axios';
 
 const API_URL = 'https://api.themoviedb.org/3';
-const API_KEY = '14e14566a5c5f6a5b9d5c973bf639419';
 
 const options = {
     headers: {
-        Authorization: `Bearer ${API_KEY}`,
+        Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
     },
 };
 
