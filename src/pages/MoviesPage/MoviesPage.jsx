@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchMoviesByQuery } from "../../services/api";
+import { searchMovies } from "../../api/tmdbApi";
 import MovieList from "../../components/MovieList/MovieList";
-import SearchBar from "../../components/SearchBar/SearchBar";
+import styles from "./MoviesPage.module.css";
 
-const MoviesPage = () => {
+function MoviesPage() {
     const [movies, setMovies] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get("query") || "";
@@ -14,8 +14,8 @@ const MoviesPage = () => {
 
         const fetchMovies = async () => {
             try {
-                const data = await fetchMoviesByQuery(query);
-                setMovies(data.results);
+                const results = await searchMovies(query);
+                setMovies(results);
             } catch (error) {
                 console.error("Error fetching movies:", error);
             }
@@ -24,17 +24,29 @@ const MoviesPage = () => {
         fetchMovies();
     }, [query]);
 
-    const handleSearch = (newQuery) => {
-        if (newQuery.trim() === "") return;
-        setSearchParams({ query: newQuery });
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const searchValue = e.target.elements.query.value.trim();
+        if (!searchValue) return;
+
+        setSearchParams({ query: searchValue });
     };
 
     return (
-        <div>
-            <SearchBar onSubmit={handleSearch} />
-            <MovieList movies={movies} />
+        <div className={styles.container}>
+            <form onSubmit={handleSearch}>
+                <input
+                    type="text"
+                    name="query"
+                    defaultValue={query}
+                    placeholder="Search movies..."
+                />
+                <button type="submit">Search</button>
+            </form>
+
+            {movies.length > 0 && <MovieList movies={movies} />}
         </div>
     );
-};
+}
 
 export default MoviesPage;
