@@ -1,35 +1,40 @@
-import { useState } from 'react';
-import { searchMovies } from '../../api/tmdbApi';
-import MovieList from '../../components/MovieList/MovieList';
-import styles from './MoviesPage.module.css';
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { fetchMoviesByQuery } from "../../services/api";
+import MovieList from "../../components/MovieList/MovieList";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
-function MoviesPage() {
-    const [query, setQuery] = useState('');
+const MoviesPage = () => {
     const [movies, setMovies] = useState([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = searchParams.get("query") || "";
 
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        if (!query.trim()) return;
+    useEffect(() => {
+        if (!query) return;
 
-        const results = await searchMovies(query);
-        setMovies(results);
+        const fetchMovies = async () => {
+            try {
+                const data = await fetchMoviesByQuery(query);
+                setMovies(data.results);
+            } catch (error) {
+                console.error("Error fetching movies:", error);
+            }
+        };
+
+        fetchMovies();
+    }, [query]);
+
+    const handleSearch = (newQuery) => {
+        if (newQuery.trim() === "") return;
+        setSearchParams({ query: newQuery });
     };
 
     return (
-        <div className={styles.container}>
-            <form onSubmit={handleSearch}>
-                <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search movies..."
-                />
-                <button type="submit">Search</button>
-            </form>
-
-            {movies.length > 0 && <MovieList movies={movies} />}
+        <div>
+            <SearchBar onSubmit={handleSearch} />
+            <MovieList movies={movies} />
         </div>
     );
-}
+};
 
 export default MoviesPage;
