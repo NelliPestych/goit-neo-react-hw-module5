@@ -1,0 +1,28 @@
+.container {
+    padding: 20px;
+}
+
+form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 300px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #ff4500;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #d73700;
+}
